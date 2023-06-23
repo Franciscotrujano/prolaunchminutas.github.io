@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROLAUNCH MINUTAS</title>
+<link rel="icon" href="file:///C:/Users/E0750771/Documents/FRANCISCO TRUJANO/ERIK PROLAUNCH APP/logov2.png" type="image/png">
+
+  <style>
+    /* Estilos CSS para la página */
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('file:///C:/Users/E0750771/Documents/FRANCISCO TRUJANO/ERIK PROLAUNCH APP/fondov1.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #FFF;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      max-width: 600px;
+      height: auto;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      color: #333;
+      overflow: hidden;
+      /* Evitar zoom de la imagen de fondo */
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="date"],
+    .form-container textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .table-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #333;
+    }
+
+    table th,
+    table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="logo-container">
+    <img class="logo" src="file:///C:/Users/E0750771/Documents/FRANCISCO TRUJANO/ERIK PROLAUNCH APP/logov1.png" alt="Logo">
+  </div>
+
+  <h1></h1>
+  <div class="form-container">
+    <label for="acuerdos">Acuerdos tomados:</label>
+    <textarea id="acuerdos" rows="4"></textarea>
+
+    <label for="responsable">Responsable(s) de coordinar:</label>
+    <input type="text" id="responsable">
+
+    <label for="fecha-inicial">Fecha de terminacion inicial:</label>
+    <input type="date" id="fecha-inicial">
+
+    <label for="fecha-final">Fecha de terminacion final:</label>
+    <input type="date" id="fecha-final">
+
+    <label for="porcentaje">Porcentaje:</label>
+    <input type="text" id="porcentaje">
+
+    <label for="comentarios">Comentarios:</label>
+    <textarea id="comentarios" rows="4"></textarea>
+
+    <button onclick="agregarTabla()">Agregar a la tabla</button>
+  </div>
+
+  <div class="table-container">
+    <table id="tabla-datos">
+      <thead>
+        <tr>
+          <th>Acuerdos tomados</th>
+          <th>Responsable(s) de coordinar</th>
+          <th>Fecha de terminacion inicial</th>
+          <th>Fecha de terminacion final</th>
+          <th>Porcentaje</th>
+          <th>Comentarios</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <button onclick="exportarCSV()">Exportar a Excel</button>
+
+  <script>
+    function agregarTabla() {
+      // Obtener los valores ingresados en el formulario
+      var acuerdos = document.getElementById('acuerdos').value;
+      var responsable = document.getElementById('responsable').value;
+      var fechaInicial = document.getElementById('fecha-inicial').value;
+      var fechaFinal = document.getElementById('fecha-final').value;
+      var porcentaje = document.getElementById('porcentaje').value;
+      var comentarios = document.getElementById('comentarios').value;
+
+      // Crear una nueva fila en la tabla con los datos ingresados
+      var tabla = document.getElementById('tabla-datos').getElementsByTagName('tbody')[0];
+      var fila = tabla.insertRow();
+      var celdaAcuerdos = fila.insertCell(0);
+      var celdaResponsable = fila.insertCell(1);
+      var celdaFechaInicial = fila.insertCell(2);
+      var celdaFechaFinal = fila.insertCell(3);
+      var celdaPorcentaje = fila.insertCell(4);
+      var celdaComentarios = fila.insertCell(5);
+
+      celdaAcuerdos.textContent = acuerdos;
+      celdaResponsable.textContent = responsable;
+      celdaFechaInicial.textContent = fechaInicial;
+      celdaFechaFinal.textContent = fechaFinal;
+      celdaPorcentaje.textContent = porcentaje;
+      celdaComentarios.textContent = comentarios;
+
+      // Limpiar los campos del formulario
+      document.getElementById('acuerdos').value = '';
+      document.getElementById('responsable').value = '';
+      document.getElementById('fecha-inicial').value = '';
+      document.getElementById('fecha-final').value = '';
+      document.getElementById('porcentaje').value = '';
+      document.getElementById('comentarios').value = '';
+    }
+
+    function exportarCSV() {
+      var tabla = document.getElementById('tabla-datos');
+      var filas = tabla.getElementsByTagName('tr');
+      var csvContent = "data:text/csv;charset=utf-8,";
+
+      // Obtener los títulos de los datos
+      var titulos = [];
+      var thElements = tabla.getElementsByTagName('th');
+      for (var i = 0; i < thElements.length; i++) {
+        titulos.push(thElements[i].textContent);
+      }
+
+      // Agregar los títulos al contenido CSV
+      csvContent += titulos.join(",") + "\n";
+
+      // Recorrer todas las filas de la tabla y obtener los datos de las celdas
+      for (var i = 0; i < filas.length; i++) {
+        var celdas = filas[i].getElementsByTagName('td');
+        var filaData = [];
+
+        // Obtener los datos de las celdas
+        for (var j = 0; j < celdas.length; j++) {
+          filaData.push(celdas[j].textContent);
+        }
+
+    // Generar una línea de datos en formato CSV
+    var filaCSV = filaData.join(",");
+    csvContent += filaCSV + "\n";
+  }
+
+  // Crear un enlace de descarga y asignar el archivo CSV
+  var encodedUri = encodeURI(csvContent);
+  var enlace = document.createElement('a');
+  enlace.href = encodedUri;
+  enlace.target = '_blank';
+  enlace.download = 'datos.csv';
+
+  // Simular el clic en el enlace para iniciar la descarga
+  enlace.click();
+}
+
+
+  </script>
+</body>
+</html>
